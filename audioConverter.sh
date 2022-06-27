@@ -105,13 +105,14 @@ ChangeOutputFileSuffix () {
     UpdateOutputFiles
 }
 
+# call function like this:
+#     local array_length=($(CountArrayItems ${arr[@]}))
 function CountArrayItems {
-    ARRAY_LENGTH=0
+    local array_length=0
     for index in $1; do
-        ARRAY_LENGTH=$((ARRAY_LENGTH + 1))
+        array_length=$((array_length + 1))
     done
-
-    return $ARRAY_LENGTH
+    echo $array_length
 }
 UpdateBitrateArrayLength () {
     # get bitrates array for counting its items
