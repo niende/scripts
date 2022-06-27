@@ -1,17 +1,13 @@
 #!/bin/bash
 
-# AUDIO CODECS
+OUTPUT_SUFFIX="_ENC"
 CODECS=("AC3" "DTS" "WAV" "FLAC")
-# AUDIO BITRATES
 BITRATES_AC3=("96" "128" "192" "224" "256" "384" "448" "640")
 BITRATES_DTS=("768" "1510")
 BITRATES_WAV=("-")
 BITRATES_FLAC=("-")
-# DRC SCALES
 DRC_SCALES=("Off" "Partial" "Full")
-# BIT DEPTHS
 BITDEPTHS=("16" "24" "32")
-# SAMPLE RATES
 SAMPLERATES=("44100" "48000" "96000")
 
 CODEC_INDEX=0
@@ -98,6 +94,17 @@ CycleSamplerate () {
     UpdateCurrentSamplerate
 }
 
+ChangeOutputFileSuffix () {
+    echo ""
+    local NEW_SUFFIX=""
+    while [ -z "$NEW_SUFFIX" ] || [[ "$NEW_SUFFIX" = *" "* ]]; do
+        read -p "Enter new output file suffix: " NEW_SUFFIX
+    done
+
+    OUTPUT_SUFFIX=$NEW_SUFFIX
+    UpdateOutputFiles
+}
+
 function CountArrayItems {
     ARRAY_LENGTH=0
     for index in $1; do
@@ -149,19 +156,20 @@ PropmtForInputFiles () {
 # }
 
 UpdateOutputFiles () {
+    # clear array before setting new output files
     OUTPUT_FILES=()
     for file in "${INPUT_FILES[@]}"; do
         # get file extension and set suffix for output files
-        extension=${file##*.}
-        extension_pos="$((${#file} - (${#extension} + 1)))"
+        local extension=${file##*.}
+        local extension_pos="$((${#file} - (${#extension} + 1)))"
 
-        file_name="${file:0:${extension_pos}}"
-        file_suffix="_ENC"
-        file_extension=".${CURRENT_CODEC,,}"
+        local file_name="${file:0:${extension_pos}}"
+        #file_suffix="_ENC"
+        local file_extension=".${CURRENT_CODEC,,}"
         # file_extension="${file:${extension_pos}}"
 
         # build output file names with suffix
-        OUTPUT_FILES+=("$file_name$file_suffix$file_extension")
+        OUTPUT_FILES+=("$file_name$OUTPUT_SUFFIX$file_extension")
     done
 }
 
@@ -292,6 +300,7 @@ ${INPUT_FILE_INFO}
 
     Input file(s)   (1): ${INPUT_FILES[@]/%/$nl                        }
     Output file(s)  (2): ${OUTPUT_FILES[@]/%/$nl                        }
+    Output file suffix (o): ${OUTPUT_SUFFIX}$nl
     Codec           (3): ${CURRENT_CODEC}
     Bitrate (Kbps)  (4): ${CURRENT_BITRATE}
     DRC             (5): ${CURRENT_DRC}
@@ -309,6 +318,9 @@ EOF
             ;;
         "2")
             # PromptForOutputFile
+            ;;
+        "o")
+            ChangeOutputFileSuffix
             ;;
         "3")
             CycleCodec
