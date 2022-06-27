@@ -269,7 +269,7 @@ do
     cat << EOF
 
 ============================================================
-    FFMPEG Audio Converter (by qwk)
+    Audio Converter
 ============================================================
 Audio info:
 ${input_file_info}
