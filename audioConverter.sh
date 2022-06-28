@@ -119,13 +119,31 @@ UpdateCurrentDrc
 UpdateCurrentBitdepth
 UpdateCurrentSamplerate
 
-PropmtForInputFiles () {
-    read -p 'Please enter input file(s) separated by spaces: ' input_files
-    # while [ ! -f $INPUT_FILE ]
-    # do
-    #     echo "File \"${INPUT_FILE}\" does not exist!"
-    #     read -p 'Please enter existing intput file(S): ' INPUT_FILES
-    # done
+PromptForInputFiles () {
+    clear
+    echo ''
+    echo "Please enter input file(s) separated by \';\'"
+    read -p ' : ' files
+
+    input_files=()
+    local input_array=(${files//;/ }) # split explode string at ';'
+    for k in "${!input_array[@]}"; do
+        local tmp="${input_array[$k]//\"}" # remove all " from file name
+        local ifile="${tmp//\'}" # remove all ' from file name
+
+        # check if file is valid and exists, otherwise query again
+        while [ -z "$ifile" ] || [ ! -f "$ifile" ]; do
+            echo ''
+            echo "Error! \"$ifile\" does not exist. Enter correct file"
+            read -p " : " ifile
+            tmp="${ifile//\"}" # remove all " from file name
+            ifile="${tmp//\'}" # remove all '' from file name
+        done
+
+        input_files+=("$ifile") # add file to input files
+    done
+
+    UpdateOutputFiles
 
     # GetInputFileInfo $INPUT_FILE
 }
@@ -292,7 +310,7 @@ EOF
     read -n1 -s -p '    : ' choice
     case "$choice" in
         "1")
-            # PropmtForInputFile
+            PromptForInputFiles
             ;;
         "2")
             # PromptForOutputFile
