@@ -196,7 +196,7 @@ GetInputFileInfo () {
 }
 
 StartConversion () {
-    # "${!INPUT_FILES[@]}" get array keys | "${INPUT_FILES[@]}" gets array values
+    # "${!input_files[@]}" get array keys | "${input_files[@]}" gets array values
     for i in "${!input_files[@]}"; do
         drc_scale_str="-drc_scale $drc_index"
         input_str="${input_files[$i]}"
@@ -313,6 +313,7 @@ EOF
             PromptForInputFiles
             ;;
         "2")
+            # TODO: allow setting custom output file names
             # PromptForOutputFile
             ;;
         "o")
