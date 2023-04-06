@@ -1,12 +1,14 @@
 #!/bin/bash
 # Script Name:  wipe-drive.sh
 # Beschreibung: Cli to securely erase a specific drive
-# Aufruf:       ./wipe-drive.sh [<1. Parameter>] [<2. Parameter>]
-#               [<Beschreibung des 1. Parameters (falls vorhanden)>]
-#               [<Beschreibung des 2. Parameters (falls vorhanden)>]
+# Aufruf:       ./wipe-drive.sh [<param 1>] [<param 2>]
+#               [<description of param 1>]
+#               [<description of param 2>]
 # Autor:        Nico Enderlein
 # Version:      0.1
 # Datum:        2023-01-05 08:38
+version="0.1"
+date="2023-01-05"
 
 nl=$'\n'
 
@@ -99,7 +101,7 @@ EOF
 
     cat << EOF
 ============================================================
-    Cli to securely erase store drives
+  Cli to securely erase storage drives - v${version} (${date})
 ============================================================
 $(df -h -x squashfs -x tmpfs -x devtmpfs)
 ------------------------------------------------------------
@@ -111,8 +113,8 @@ $(df -h -x squashfs -x tmpfs -x devtmpfs)
 
     Current wipe command: ${wipe_command}
 
-                     (s)tart
-                     (q)uit
+                     (S)tart
+                     (Q)uit
 ------------------------------------------------------------
 EOF
     read -n 1 -s -p '    : ' choice
@@ -143,14 +145,20 @@ EOF
             exit
             ;;
         "Q")
-            echo ''
+            echo 'EXIT'
             exit
             ;;
         "s")
-            echo "case sensitive!" ;;
+            echo "case sensitive!"
+            sleep 2
+            ;;
         "q")
-            echo "case sensitive!" ;;
+            echo "case sensitive!"
+            sleep 2
+            ;;
         * )
-            echo "invalid option" ;;
+            echo "invalid option"
+            sleep 2
+            ;;
     esac
 done
