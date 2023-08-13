@@ -1,4 +1,13 @@
 #!/bin/bash
+# Script Name:  captureWithFlameshot.sh
+# Beschreibung: Cli to handle some screenshot task that flameshot has not built in yet
+# Aufruf:       ./captureWithFlameshot.sh [<param 1>]
+#               [selection mode - 'current_screen' | 'active_window' | 'select_window' | EMPTY]
+# Autor:        Nico Enderlein
+# Version:      0.1
+# Datum:        2023-08-13 06:55pm
+version="0.1"
+date="2023-08-13"
 
 if [ -z "$1" ]; then
     # ---------------------------------#
